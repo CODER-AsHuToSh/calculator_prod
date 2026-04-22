@@ -1,38 +1,74 @@
 #include <iostream>
-using namespace std;
+#include <stdexcept>
+
+// Function declarations
+double add(double a, double b) {
+    return a + b;
+}
+
+double subtract(double a, double b) {
+    return a - b;
+}
+
+double multiply(double a, double b) {
+    return a * b;
+}
+
+double divide(double a, double b) {
+    if (b == 0) {
+        throw std::invalid_argument("Error: Division by zero");
+    }
+    return a / b;
+}
 
 int main() {
     double num1, num2;
     char op;
 
-    cout << "Simple Calculator\n";
-    cout << "Enter first number: ";
-    cin >> num1;
+    std::cout << "Simple Calculator\n";
 
-    cout << "Enter operator (+, -, *, /): ";
-    cin >> op;
+    // Input with validation
+    std::cout << "Enter first number: ";
+    if (!(std::cin >> num1)) {
+        std::cerr << "Invalid input for first number.\n";
+        return 1;
+    }
 
-    cout << "Enter second number: ";
-    cin >> num2;
+    std::cout << "Enter operator (+, -, *, /): ";
+    std::cin >> op;
 
-    switch(op) {
-        case '+':
-            cout << "Result = " << num1 + num2;
-            break;
-        case '-':
-            cout << "Result = " << num1 - num2;
-            break;
-        case '*':
-            cout << "Result = " << num1 * num2;
-            break;
-        case '/':
-            if(num2 != 0)
-                cout << "Result = " << num1 / num2;
-            else
-                cout << "Error! Division by zero.";
-            break;
-        default:
-            cout << "Invalid operator!";
+    std::cout << "Enter second number: ";
+    if (!(std::cin >> num2)) {
+        std::cerr << "Invalid input for second number.\n";
+        return 1;
+    }
+
+    try {
+        double result;
+
+        switch (op) {
+            case '+':
+                result = add(num1, num2);
+                break;
+            case '-':
+                result = subtract(num1, num2);
+                break;
+            case '*':
+                result = multiply(num1, num2);
+                break;
+            case '/':
+                result = divide(num1, num2);
+                break;
+            default:
+                std::cerr << "Invalid operator.\n";
+                return 1;
+        }
+
+        std::cout << "Result = " << result << "\n";
+    } 
+    catch (const std::exception& e) {
+        std::cerr << e.what() << "\n";
+        return 1;
     }
 
     return 0;
